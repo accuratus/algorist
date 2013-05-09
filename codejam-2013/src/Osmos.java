@@ -30,10 +30,11 @@ public class Osmos {
             mote += motelist.get(lpos);
             lpos++;
         }
-
+        
+        if (mote == 1) return motelist.size();
         if (lpos > motelist.size()-1) return 0; //no more motes
-
-        int addres = (mote == 1) ? Integer.MAX_VALUE : consume(mote+mote-1, lpos, motelist);
+        
+        int addres = consume(mote+mote-1, lpos, motelist);
         int removeres = consume(mote, lpos+1, motelist);
         //System.out.println("addres " + addres + ", removeres " + removeres);
         return 1 + Math.min(addres, removeres);
