@@ -35,6 +35,7 @@ public class Osmos {
         if (lpos > motelist.size()-1) return 0; //no more motes
         
         int addres = consume(mote+mote-1, lpos, motelist);
+        if (addres == 0) return 1; //adding is the best option, no point in removing
         int removeres = consume(mote, lpos+1, motelist);
         //System.out.println("addres " + addres + ", removeres " + removeres);
         return 1 + Math.min(addres, removeres);
