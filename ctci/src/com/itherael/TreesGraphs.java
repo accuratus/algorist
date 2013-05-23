@@ -1,4 +1,6 @@
-import static org.junit.Assert.*;
+package com.itherael;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -17,10 +19,20 @@ public class TreesGraphs {
         return (Math.abs(leftHeight-rightHeight) > 1) ? -1 : maxHeight;
     }
     
-    public class Node {
-        Node left, right;
-        int value;
-        public Node(int v) { this.value = v; }
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public Node buildBST(int[] ar, int r, int l) {
+        if ((ar.length < 1) || (r > l)) { return null; }
+        int mid = (r+l)/2;
+        Node n = new Node(ar[mid]);
+        n.left = buildBST(ar, r, mid-1);
+        n.right = buildBST(ar, mid+1, l);
+        return n;
+    }
+    
+    public class Node<T extends Comparable<?>> {
+        Node<T> left, right;
+        T data;
+        public Node(T data) { this.data = data; }
     }
     
     @Test
@@ -44,6 +56,34 @@ public class TreesGraphs {
         
         root.right.right.right = new Node(0);
         assertEquals(-1, isBalanced(root)); // right side too long, unbalanced
+    }
+    
+    @Test
+    public void testBuildBST() {
+        int[] ar = new int[] {1};
+        Node root = buildBST(ar, 0, ar.length-1);
+        assertEquals(1, root.data);
+        
+        ar = new int[] {1,2};
+        root = buildBST(ar, 0, ar.length-1);
+        assertEquals(1, root.data);
+        assertEquals(2, root.right.data);
+        //  1   
+        //   \ 
+        //    2 
+        
+        ar = new int[] {1, 3, 4, 5, 7, 10};
+        root = buildBST(ar, 0, ar.length-1);
+        assertEquals(4, root.data);
+        assertEquals(3, root.left.right.data);
+        assertEquals(10, root.right.right.data);
+        //    4       
+        //   / \   
+        //  /   \  
+        // 1     7   
+        //  \   / \ 
+        //   3 5  10
+        
     }
     
 }
