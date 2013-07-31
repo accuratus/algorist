@@ -6,6 +6,7 @@ http://steve-yegge.blogspot.com/2008/03/get-that-job-at-google.html
 **Given a list of points, find the k closest points to a given point**
 
 Calculate euclidean distance between given point and all other points, throw Pair(Point p, double distance) into a min heap, poll k times.
+*Tip: don't actually have to bother with sqrt() for distance. raw squared distance measure is enough.*
 
 Runtime O(n) distance calc + O(n log n) heap insertions + O(k log n) polls (find is constant, delete-min is log n) = O(n log n)
 
