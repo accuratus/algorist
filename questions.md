@@ -1,6 +1,3 @@
-### prep
-http://steve-yegge.blogspot.com/2008/03/get-that-job-at-google.html
-
 ### questions
 
 **Given a list of points, find the k closest points to a given point**
