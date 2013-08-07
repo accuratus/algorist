@@ -59,3 +59,59 @@ Generate candidate numbers off of the 1 ... kth number (every time we remove).
 ...
 ```
 We ensure that we'll always add the smallest 'next' number, because we're always 'discovering' the next numbers off of the removed minimum (... 7*3, 7*5, 7*7 are larger at the end of the 3rd itr, but we'll still discover 9*3 because we're calculating off of minimum).
+
+
+**8.2) Design a call center with three levels of employees: respondent, manager, and director. Incoming call must first be allocated to a free respondent. If respondent can't handle, he must escalate to manager. If manager isn't free or not able to handle, call must escalate to director.**
+
+```
+public class CallHandler {
+  List<List<Call>> callQueues;
+  List<List<Employee>> freeQueues;
+
+  public void dispatchCall(Call call) {
+    Employee e = getNextFree();
+    if (e == null) {
+      // no available emps, add to call queue
+    }
+    e.receiveCall(call);
+  }
+}
+
+private Employee getNextFree() { 
+  // poll respondent free queue ...
+}
+
+public class Call {
+  private Caller caller;
+  private Rank minRank;
+}
+
+public enum Rank {
+  Respondent(0), Manager(1), Director(2);
+  private final int r;
+  Rank(int r) { this.r = r }
+}
+
+// no need to instantiate Employee directly
+public abstract class Employee {
+  private Call currentCall;
+  private Rank rank;
+  
+  public void receiveCall(Call c) { 
+    this.currentCall = c;
+    if (rank < c.minRank) {
+      // can't handle this call, need to escalate, then free ourself
+      escalate(c);
+      ...
+    }
+  }
+  
+  private void escalate(Call c) {
+    // add to call queue for next level rank
+  }
+}
+
+public class Respondent extends Employee {
+  public Respondent() { rank = Rank.Respondent; }
+} ...
+```
