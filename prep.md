@@ -12,3 +12,6 @@ Inheritance
 Polymorphism
 * The ability for one type to express some sort of contract, and for other types to implement that contract (whether through class inheritance or not) in different ways, each according to their own purpose. Code using that contract should not have to care about which implementation is involved, only that the contract will be obeyed.
 * Declaring a uniform interface that isn't type aware, leaving implementation details to concrete types that implement the interface.
+
+**Difference between HashMap & Hashtable?**
+HashMap is not synchronized, Hashtable is. Hashtable doesn't allow null keys or values.
