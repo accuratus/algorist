@@ -115,3 +115,32 @@ public class Respondent extends Employee {
   public Respondent() { rank = Rank.Respondent; }
 } ...
 ```
+
+**9.1) A child is running up a staircase with n steps, and can hop either 1 step, 2 steps, or 3 steps at a time. Implement a method to count how many possible ways the child can run up the stairs.**
+
+```
+public int steps(int n) {
+  if (n < 0) return 0;
+  if (n == 0) return 1;
+  return steps(n-1)+steps(n-2)+steps(n-3);
+}
+```
+We're only interested in the *number* of combinations, so as long as we got to f(0) somehow, we count that as one valid combination. Runtime: exponential O(3^n) since each call branches out three more times.
+
+We can do better, by memoizing.
+```
+public int steps(int n, int[] map) {
+  if (n < 0} return 0;
+  if (n == 0) return 1;
+  if (map[n] != 0) {
+    return map[n];
+  } else {
+    map[n] = steps(n-1, map)+
+             steps(n-2, map)+
+             steps(n-3, map);
+    return map[n]
+  }
+}
+```
+Runtime ??
+
