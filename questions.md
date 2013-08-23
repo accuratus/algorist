@@ -151,7 +151,7 @@ Path will have X right steps + Y down steps. Combinatorics: there are X+Y steps 
 RRDD RDRD RDDR
 DDRR DRDR DRRD
 ```
-So, the number of total paths must be the number of ways of selecting X right-steps out of X+Y total steps. This is the binomial expression "n choose r" <img src="http://latex.codecogs.com/svg.latex?\dbinom{n}{r}=\frac{n!}{r!(n-r)!}">. For our problem: <img src="http://latex.codecogs.com/svg.latex?\dbinom{X+Y}{X}=\frac{(X+Y)!}{X!Y!}">
+So, the number of total paths must be the number of ways of selecting X right-steps out of X+Y total steps. This is the binomial expression "n choose r" <img src="http://latex.codecogs.com/svg.latex?\dbinom{n}{r}=\frac{n!}{r!(n-r)!}"> and, for our problem: <img src="http://latex.codecogs.com/svg.latex?\dbinom{X+Y}{X}=\frac{(X+Y)!}{X!Y!}">
 
 **FOLLOW UP: Certain spots are off limits, so that the robot cannot step on them. Design an algorithm to find a path from top-left to bottom-right.**
 
