@@ -138,9 +138,84 @@ public int steps(int n, int[] map) {
     map[n] = steps(n-1, map)+
              steps(n-2, map)+
              steps(n-3, map);
-    return map[n]
+    return map[n];
   }
 }
 ```
 Runtime ??
 
+**9.2) A robot sits on the upper left corner of an X by Y grid. The robot can only move right & down. How many possible paths are there for the robot to go from (0,0) to (X,Y)?**
+
+Path will have X right steps + Y down steps. Combinatorics: there are X+Y steps to get to the target, and X of them are right-steps. For example: for target (2,2) all possible paths are:
+```
+RRDD RDRD RDDR
+DDRR DRDR DRRD
+```
+So, the number of total paths must be the number of ways of selecting X right-steps out of X+Y total steps. This is the binomial expression "n choose r" <img src="http://latex.codecogs.com/svg.latex?\dbinom{n}{r}=\frac{n!}{r!(n-r)!}">. For our problem: <img src="http://latex.codecogs.com/svg.latex?\dbinom{X+Y}{X}=\frac{(X+Y)!}{X!Y!}">
+
+**FOLLOW UP: Certain spots are off limits, so that the robot cannot step on them. Design an algorithm to find a path from top-left to bottom-right.**
+
+We can start from the target, and try to find our way to the beginning.
+```
+public boolean findPath(int x, int y, ArrayList<Point> path) {
+  path.add(new Point(x, y));
+  if (x == 0 && y == 0) { // we've found a path!
+    return true;
+  }
+  
+  boolean success = false;
+  if (x >= 1 && isFree(x-1, y)) { // try left!
+    success = findPath(x-1, y, path);
+  }
+  
+  if (!success && y >= 1 && isFree(x, y-1) { // left didn't work out, so try up!
+    success = findPath(x, y-1, path);
+  }
+  
+  if (!success) { // neither left or up worked out, so let's discard this path
+    path.remove();
+  }
+  
+  return success;
+}
+```
+
+Notice that different paths may route through some common point. This is illustrated by the fact that if we were at (X-1, Y), that the next points we would check are (X-2, Y) & (X-1, Y-1), and if we were at (X, Y-1), then the next points we would check are (X-1, Y-1) & (X, Y-2). (Common point denoted as '!' below)
+```
+. . . . .
+. . . . .
+. . . . c
+. . . ! x
+. . c x t
+```
+Since we'd be doing redundant work, we can memoize previous path explorations off that common point, effectively "marking" off portions of known failed space.
+```
+public void findPath(int x, int y, ArrayList<Point> path, HashMap<Point, Boolean> memo) {
+  Point p = new Point(x,y);
+  path.add(p);
+  
+  if (x == 0 && y == 0) { // we've found a path!
+    return true;
+  }
+  
+  if (memo.containsKey(p)) {
+    return memo.get(p)  // we've already computed the path from this point, reuse the result
+  }
+  
+  boolean success = false;
+  if (x >= 1 && isFree(x-1, y)) { // try left!
+    success = findPath(x-1, y, path);
+  }
+  
+  if (!success && y >= 1 && isFree(x, y-1) { // left didn't work out, so try up!
+    success = findPath(x, y-1, path);
+  }
+  
+  if (!success) { // neither left or up worked out, so let's discard this path
+    path.remove();
+  }
+  
+  memo.put(p, success);
+  return success;
+}
+```
