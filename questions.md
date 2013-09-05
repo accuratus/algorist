@@ -255,7 +255,7 @@ public void subset(List<String> chosen, List<String> remain) {
 ```
 Runtime: O(2^n) because every element has the "choice" of being in the subset or not { 2 * 2 * 2 ... }
 
-**9.5) Write a method to compute all permutations of a string
+**9.5) Write a method to compute all permutations of a string**
 ```
 public void permute(List<String> chosen, List<String> remain) {
   if (remain.isEmpty()) {
@@ -271,3 +271,5 @@ public void permute(List<String> chosen, List<String> remain) {
   }
 }
 ```
+
+**9.6) Write an algorithm that prints all valid combinations of n-pairs of parenthesis.**
