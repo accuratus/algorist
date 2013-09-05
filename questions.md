@@ -219,3 +219,55 @@ public void findPath(int x, int y, ArrayList<Point> path, HashMap<Point, Boolean
   return success;
 }
 ```
+
+**9.4) Write a method to return all subsets of a set**
+
+{ A, B, C, D }
+```
+[]
+A - AB - ABC - ABCD
+         ABD
+    AC - ACD
+    AD
+    
+B - BC - BCD
+    BD
+    
+C - CD
+
+D
+```
+```
+public void subset(List<String> chosen, List<String> remain) {
+  if (remain.isEmpty()) { return; }
+  
+  System.out.println(chosen);
+  for(int i=0; i<remain.length(); i++) {
+    ArrayList<String> newc = new ArrayList<String>(chosen);
+    ArrayList<String> newr = new ArrayList<String>();
+    newc.add(s);
+    if (i+1 != remain.length()) {
+      newr.addAll(remain.subList(i+1, remain.length()));
+    }
+    subset(newc, newr);
+  }
+}
+```
+Runtime: O(2^n) because every element has the "choice" of being in the subset or not { 2 * 2 * 2 ... }
+
+**9.5) Write a method to compute all permutations of a string
+```
+public void permute(List<String> chosen, List<String> remain) {
+  if (remain.isEmpty()) {
+    System.out.println(chosen);
+  }
+  
+  for(String s : remain) {
+    chosen.add(s);
+    ArrayList<String> newr = new ArrayList<String>(remain);
+    newr.remove(s);
+    permute(chosen, newr);
+    chosen.remove(s);
+  }
+}
+```
