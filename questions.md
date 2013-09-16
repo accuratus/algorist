@@ -273,3 +273,98 @@ public void permute(List<String> chosen, List<String> remain) {
 ```
 
 **9.6) Write an algorithm that prints all valid combinations of n-pairs of parenthesis.**
+
+*Top-down (we don't need intermediate solutions, and only need to return complete solutions)*
+```
+public void parens(int open, int close, String s) {
+  if (open == 0 && close == 0) {
+    System.out.println(s);
+  }
+  
+  if (open > 0) {
+    parens(open-1, close, s + "(");
+  }
+  
+  if (close != 0 && close > open) {
+    parens(open, close-1, s + ")");
+  }
+}
+```
+
+*Bottom-up (we structure it this way to make it possible to memoize for DP-based solution)*
+```
+public static List<String> parens(int openleft, int closedleft) {
+  List<String> results = new ArrayList<String>();
+
+	if (openleft == 0 && closedleft == 0) {
+		results.add("");
+		return results;
+	}
+
+	if (openleft > 0) {
+		List<String> openres = parens(openleft-1, closedleft);
+		for (String s : openres) {
+			results.add("(" + s);
+		}
+	}
+	
+	if (closedleft != 0 && closedleft > openleft) {
+		List<String> closedres = parens(openleft, closedleft-1);
+		for (String s : closedres) {
+			results.add(")" + s);
+		}
+	}
+  
+  return results;
+}
+```
+
+*Bottom-up w/ memoization (reusing partial solutions)*
+```
+private static Map<Integer, Map<Integer, List<String>>> memos = new HashMap<Integer, Map<Integer, List<String>>>();
+
+public static List<String> parens(int openleft, int closedleft) {
+	List<String> results = new ArrayList<String>();
+
+	if (openleft == 0 && closedleft == 0) {
+		results.add("");
+		return results;
+	}
+
+	if (openleft > 0) {
+		if (memos.get(openleft-1) == null) {
+			memos.put(openleft-1, new HashMap<Integer, List<String>>());
+		}
+		List<String> openres;
+		List<String> memoed = memos.get(openleft-1).get(closedleft);
+		if (memoed == null) {
+			openres = parens(openleft-1, closedleft);
+			memos.get(openleft-1).put(closedleft, openres);	
+		} else {
+			openres = memoed;
+		}
+		for (String s : openres) {
+			results.add("(" + s);
+		}
+	}
+	
+	if (closedleft != 0 && closedleft > openleft) {
+		if (memos.get(openleft) == null) {
+			memos.put(openleft, new HashMap<Integer, List<String>>());
+		}
+		List<String> closedres;
+		List<String> memoed = memos.get(openleft).get(closedleft-1);
+		if (memoed == null) {
+			closedres = parens(openleft, closedleft-1);
+			memos.get(openleft).put(closedleft-1, closedres);
+		} else {
+			closedres = memoed;
+		}
+		for (String s : closedres) {
+			results.add(")" + s);
+		}
+	}
+	
+	return results;
+}
+```
