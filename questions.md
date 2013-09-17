@@ -368,3 +368,30 @@ public static List<String> parens(int openleft, int closedleft) {
 	return results;
 }
 ```
+
+**9.8) Given an infinite number of quarters, dimes, nickels, and pennies, calculate the number of ways of representing n cents.**
+
+This avoids counting the permutations of the same coins (eg: 1+5+5 then 5+1+5), by never using larger denominations after using a smaller one (nextDenom is always the next smallest coin). The base case is when nextDenom is 1, meaning that the rest of the amount would be filled by pennies.
+
+```
+public int makeChange(int n, int denom) {
+	int nextDenom;
+	switch (denom) {
+		case 25:
+			nextDenom = 10;
+		case 10:
+			nextDenom = 5;
+		case 5:
+			nextDenom = 1;
+		case 1:
+			return 1;
+	}
+	
+	int ways = 0;
+	for (int i=0; i*denom <= n; i++) {
+		ways += makeChange(n - i*denom, nextDenom);
+	}
+	
+	return ways;
+}
+```
