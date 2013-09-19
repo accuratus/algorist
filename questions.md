@@ -395,3 +395,55 @@ public int makeChange(int n, int denom) {
 	return ways;
 }
 ```
+
+
+**9.9) Write an algorithm that prints all ways of arranging 8 queens on an 8x8 chess board so that none share the same row, column, or diagonal.**
+
+```
+assume queen is placed 0,0 --> assume queen is placed 1,0 --> ... 
+                               assume queen is placed 1,1 -->
+                               assume queen is placed 1,2 -->
+                               ...
+                               assume queen is placed 1,7 -->
+
+assume queen is placed 0,1 --> ...
+```
+We effectively "brute force", we try placing queens in every column for each row (looking for valid spots). If we reach GRID_SIZE rows, our solution candidate is "complete" and is added to overall solution.
+
+```
+	private static final int GRID_SIZE = 8;
+	private static List<Integer[]> solutions = new ArrayList<Integer[]>();
+	
+	private static void placeQueen(Integer[] sol, int row) {
+		if (row == GRID_SIZE) {
+			solutions.add(sol.clone());
+		}
+	
+		for(int colCandidate=0; colCandidate<GRID_SIZE; colCandidate++) {
+			// check if this candidate spot is valid
+			if (isValidPlacement(row, colCandidate, sol)) {
+				sol[row] = colCandidate;
+				placeQueen(sol, row+1);
+			}
+		}
+	}
+	
+	private static boolean isValidPlacement(int rowCandid, int colCandid, Integer[] solCandid) {
+		for(int rowExist=0; rowExist<rowCandid; rowExist++) {
+			// don't need to check row, because we place one row at a time
+			// check if candidate column was already used by an existing placement
+			if (solCandid[rowExist] == colCandid) {
+				return false;
+			}
+			
+			// check if candidate position collides with existing placement's diagonal
+			// (if column difference and row difference are the same, it's part of the same diagonal)
+			int colDiff = Math.abs(solCandid[rowExist] - colCandid);
+			int rowDiff = rowCandid - rowExist;
+			if (colDiff == rowDiff) {
+				return false;
+			}
+		}
+		return true;
+	}
+```
