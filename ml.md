@@ -88,7 +88,7 @@ The idea is to identify features (with signal) that are correlated with target.
 There are many types of feature transformations:
 * Non-linear feature transformations for linear models 
   - Numeric Value Binning: introduces non-linearity into linear models. Binning strategies include: equal size ranges, equal number of examples.
-  - Quadratic Features: derive new non-linear features by combining feature pairs.
+  - Quadratic Features: derive new non-linear features by combining feature pairs. Eg: People with a Master degree in Business (Quadratic feature over Education + Occupation) make much more money than people with just "Masters" or "Business" degrees. Helps capture this "cross feature" relationship.
 * Domain-specific transformations (eg: text)
   - Text features:
     - N-grams, contiguous subsequences of n words - to capture multi-word concepts. 2-grams of Black Hawk Down: {Black_Hawk, Hawk_Down}. "Bank" can have different meanings based on context: river bank, financial bank. N-grams help compensate for this ambiguity.
@@ -97,3 +97,72 @@ There are many types of feature transformations:
     - Lowercasing, punctuation removal: Helps standardize syntax
     - Cutting off very high/low percentiles: Reduces feature space without substantial loss in predictive power
     - TF-IDF normalization: Corpus wide normalization of word frequency
+
+####Feature Selection
+* Often,  “Less is More“
+  - Better generalization behavior, useful to prevent "overfitting"
+  - More robust parameter estimates with smaller number of non-redundant features
+
+####Parameter Tuning
+* Loss function
+  - Squared: regression, classification
+  - Hinge: classification only, more robust to outliers
+  - Logistic: classification only, better for skewed class distributions
+* Number of passes
+  - More passes: better fit on training data, but diminishing returns
+* Regularization
+  - Prevent overfitting by constraining weights to be small
+* Learning parameters (e.g. decay rate)
+  - Decaying too aggressively: algorithm never reaches optimum
+  - Decaying too slowly: algorithm bounces around, never converges to optimum
+* Use **k-fold cross-validation** to evaluate model performance for a given parameter setting
+  - Randomly split training data into k parts
+  - Train models on k training sets, each containing k-1 parts
+  - Test each model on remaining part (not used for training)
+  - Average k model performance scores
+
+####Evaluation Metrics (Classification)
+    Confusion matrix for binary classification
+    ------------------------------------------------
+    |                 | Actual true | Actual false |
+    | Predicted true  | TP          | FP           |
+    | Predicted false | FN          | TN           |
+    ------------------------------------------------
+
+* Precision = TP/(TP+FP): How correct are you on the ones you predicted +1?
+* Recall = TP/(TP+FN): What fraction of actual +1's did you correctly predict?
+* True Positive Rate (TPR) = Recall
+* False Positive Rate (FPR) = FP/(FP+TN): What fraction of -1's did you wrongly predict?
+
+**AUC: Area under ROC curve**, plots TPR vs. FPR for different thresholds. A perfect model has AUC=1, random chance has AUC=0.5
+
+![roc curve comparison](http://gim.unmc.edu/dxtests/roccomp.jpg)
+
+Example: Imagine fraud classification of orders. x-axis (FPR) represents %cumulative non-frauds, where y-axis (TPR) represents %cumulative frauds. You want to capture as large %cumulative frauds with as few %cumulative non-frauds as possible. Deciding where this point lies is an operational/business decision - the user has to choose.
+
+Example: Imagine email spam detection. On the X-axis is the percentage of good emails that are going to be affected by our action – in this case, sidelining emails into spam folder. On the y-axis is the percentage of spam we are capturing. That knee in the ROC curve is a great tradeoff point. If we set our operating cutoff at that point, we’ll get a good *balance between the good population we impact, and the bads we capture*. Of course, if there are different costs to sidelining a population and capturing the bads, we can shift that operating point to the left or to the right.
+
+####Evaluation Metrics (Regression)
+* Root Mean Square Error (RMSE)
+* Mean Absolute Percent Error (MAPE)
+
+#### Handling Imbalanced Datasets
+Many applications have skewed class distribution (e.g. clicks vs non-clicks). The majority class may dominate, class boundary cannot be learned effectively
+
+Strategies include:
+* Downsampling: Downsample examples from majority class
+* Oversampling: Assign higher importance weights to examples from minority class
+
+####Overall Modelling Guidelines
+* **The more training examples, the better**
+  - Large training sets lead to better generalization to unseen examples
+* **The more features, the better**
+  - Invest time in feature engineering to construct features with signal
+* **Evaluate model performance on separate test set**
+  - Tune model parameters on separate validation set (and not test set)
+* **Pay attention to training data quality**
+  - Garbage in Garbage out, Remove outliers, target leakers
+* **Select evaluation metrics that reflect business objectives**
+  - AUC may not always be appropriate, Log-likelihood, Precision@K
+* **Retrain models periodically**
+  - Ensure training data distribution is in sync with test data distribution
