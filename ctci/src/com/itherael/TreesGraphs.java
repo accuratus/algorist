@@ -2,7 +2,12 @@ package com.itherael;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import org.junit.Test;
+
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Node;
 
 public class TreesGraphs {
     
@@ -27,6 +32,48 @@ public class TreesGraphs {
         n.left = buildBST(ar, r, mid-1);
         n.right = buildBST(ar, mid+1, l);
         return n;
+    }
+    
+    // (#4.4) O(N) time, O(N) space
+    public ArrayList<LinkedList<Node>> buildLinkedList(Node root) {
+        ArrayList<LinkedList<Node>> result = new ArrayList<LinkedList<Node>>();
+        LinkedList<Node> current = new LinkedList<Node>();
+        if (root != null) {
+            current.add(root);
+        }
+        while(current.size() > 0) {
+            result.add(current);
+            LinkedList<Node> parents = current;
+            current = new LinkedList<Node>();
+            for(Node parent : parents) {
+                if (parent.left != null) { current.add(parent.left); }
+                if (parent.right != null) { current.add(parent.right); }
+            }
+        }
+        return result;
+    }
+    
+    // (#4.6)
+    
+    @Test
+    public void testSubstr() {
+        System.out.println(isSubstring("aaaaaaaaaaaab", "aaaab"));
+        System.out.println(isSubstring("aaaaaaaaaaaab", "aaaaaaaaaabb"));
+    }
+    
+    public boolean isSubstring(String word, String pattern) {
+        boolean found;
+        for (int i=0; i<(word.length()-pattern.length()+1); i++) {
+            found = true;
+            for (int j=0; j<pattern.length(); j++) {
+                if (word.charAt(i+j) != pattern.charAt(j)) {
+                    found = false;
+                    break;
+                }
+            }
+            if (found) return true;
+        }
+        return false;
     }
     
     public class Node<T extends Comparable<?>> {
