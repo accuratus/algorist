@@ -19,3 +19,9 @@ Polymorphism
 * http://en.wikipedia.org/wiki/Streaming_algorithm
 * http://lkozma.net/blog/sketching-data-structures/
 * http://en.wikipedia.org/wiki/Bloom_filter
+
+**Database / Cache Servers**
+* **Redis**: *In-memory, non-relational database*. Stores Strings, lists, sets, hashes, sorted sets
+* **memcached**: *In-memory, key-value cache*. Stores Mapping of keys to values
+* **MySQL**: *Relational database*. Stores Databases of tables of rows, views over tables, spatial and third-party extensions
+* **MongoDB**: *On-disk non-relational document store*. Stores Databases of tables of schema-less BSON documents
