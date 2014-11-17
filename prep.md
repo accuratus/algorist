@@ -15,6 +15,7 @@ Polymorphism
 * Declaring a uniform interface that isn't type aware, leaving implementation details to concrete types that implement the interface.
 
 **Streaming Algorithms, Sketch, Probalistic Data Structures**
-http://en.wikipedia.org/wiki/Streaming_algorithm
-http://lkozma.net/blog/sketching-data-structures/
-http://en.wikipedia.org/wiki/Bloom_filter
+
+* http://en.wikipedia.org/wiki/Streaming_algorithm
+* http://lkozma.net/blog/sketching-data-structures/
+* http://en.wikipedia.org/wiki/Bloom_filter
