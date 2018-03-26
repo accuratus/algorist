@@ -1,8 +1,6 @@
-### prep
-http://steve-yegge.blogspot.com/2008/03/get-that-job-at-google.html
+### notes
 
-
-**OOP Principles**
+**OOP**
 
 Encapsulation (information hiding)
 * An object's data & logic is hidden from other objects, such that the only thing an object knows about another, is it's interface.
